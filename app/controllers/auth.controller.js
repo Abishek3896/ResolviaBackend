@@ -35,7 +35,7 @@ const signup = async (req, res, next) => {
 
 const signin = async (req, res, next) => {
   const { username, password } = req.body;
-
+  console.log(username, password);
   if (!username || !password || username === '' || password === '') {
     next(error(400, 'All fields are required'));
   }
