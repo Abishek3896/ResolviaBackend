@@ -4,6 +4,7 @@ const error = require('../middleware/error.js');
 const jwt = require('jsonwebtoken');
 const signup = async (req, res, next) => {
   const { username, email, mobileNum, password } = req.body;
+  console.log(req.body);
 
   if (
     !username ||
