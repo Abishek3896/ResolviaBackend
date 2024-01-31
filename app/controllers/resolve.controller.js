@@ -1,6 +1,7 @@
 const errorHandler = require('../middleware/error.js');
 const Resolve = require('../models/resolve.model.js');
 const create = async (req, res, next) => {
+  //console.log(req.user);
   if (!req.body.title || !req.body.content) {
     return next(errorHandler(400, 'Please provide all required fields'));
   }
