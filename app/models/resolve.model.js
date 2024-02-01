@@ -28,6 +28,10 @@ const resolveSchema = new Schema(
       required: true,
       unique: true,
     },
+    post_as: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
