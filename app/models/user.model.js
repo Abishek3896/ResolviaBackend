@@ -23,7 +23,7 @@ const userSchema = new Schema(
     profilePicture: {
       type: String,
       default:
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+        'https://i.pinimg.com/originals/07/66/d1/0766d183119ff92920403eb7ae566a85.png',
     },
   },
   {
@@ -31,10 +31,6 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject();
-  object.id = _id;
-  return object;
-});
+
 
 module.exports = mongoose.model('user', userSchema);

@@ -1,6 +1,6 @@
-import express from "express";
+const express= require("express");
 
-import { signout, test } from "../controllers/user.controller.js";
+const { signout, test }= require("../controllers/user.controller.js");
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ const router = express.Router();
 router.get("/test", test);
 router.post("/signout", signout);
 
-export default router;
+module.exports= router;
