@@ -38,6 +38,11 @@ const resolveSchema = new Schema(
   }
 );
 
-const Resolve = mongoose.model('Resolve', resolveSchema);
+{/*resolveSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
+}); */}
 
+const Resolve = mongoose.model('Resolve', resolveSchema);
 module.exports = Resolve;

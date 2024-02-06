@@ -3,6 +3,7 @@ const cors = require('cors');
 const UserRoutes = require('./app/routes/user.routes.js');
 const AuthRoutes = require('./app/routes/auth.routes.js');
 const ResolveRoutes = require('./app/routes/resolve.routes.js');
+const CommentRoutes = require('./app/routes/comment.routes.js')
 const cookieParser = require('cookie-parser');
 const AWS = require('aws-sdk');
 require('dotenv').config();
@@ -14,9 +15,8 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-const db = require('./app/models');
-db.mongoose
-  .connect(db.url)
+const mongoose = require('mongoose');
+mongoose.connect(process.env.DB_URL)
   .then(() => {
     console.log('Connected to the mongoDB!');
   })
@@ -39,6 +39,7 @@ app.listen(PORT, () => {
 app.use('/api/user', UserRoutes);
 app.use('/api/auth', AuthRoutes);
 app.use('/api/resolve', ResolveRoutes);
+app.use('/api/comment', CommentRoutes);
 
 app.use((err, req, res, next) => {
   //console.log(req.cookies);
