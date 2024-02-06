@@ -4,7 +4,7 @@ const UserRoutes = require('./app/routes/user.routes.js');
 const AuthRoutes = require('./app/routes/auth.routes.js');
 const ResolveRoutes = require('./app/routes/resolve.routes.js');
 const cookieParser = require('cookie-parser');
-
+const AWS = require('aws-sdk');
 require('dotenv').config();
 
 const app = express();
