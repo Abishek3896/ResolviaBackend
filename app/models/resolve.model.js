@@ -17,7 +17,8 @@ const resolveSchema = new Schema(
       unique: true,
     },
     media_content: {
-      type: String,
+      type: Array,
+      default: [],
     },
     category: {
       type: String,
@@ -38,11 +39,13 @@ const resolveSchema = new Schema(
   }
 );
 
-{/*resolveSchema.method('toJSON', function () {
+{
+  /*resolveSchema.method('toJSON', function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;
   return object;
-}); */}
+}); */
+}
 
 const Resolve = mongoose.model('Resolve', resolveSchema);
 module.exports = Resolve;
