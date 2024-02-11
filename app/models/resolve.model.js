@@ -32,6 +32,18 @@ const resolveSchema = new Schema(
       type: String,
       required: true,
     },
+    likes: {
+      type: Array,
+      default: [],
+    },
+    numberOfLikes: {
+      type: Number,
+      default: 0,
+    },
+    dislikes: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,

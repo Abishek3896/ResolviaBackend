@@ -1,13 +1,13 @@
 const express= require("express");
-
-const { signout, test }= require("../controllers/user.controller.js");
+const verifyToken = require('../middleware/verifyUser.js');
+const { signout, test, getUser,updateUser }= require("../controllers/user.controller.js");
 
 const router = express.Router();
 
-// router.post('/createProfile', addUser);
-// router.delete('/deleteProfile', DeleteUser);
-// router.put('/updateProfile', UpdateUser);
 router.get("/test", test);
 router.post("/signout", signout);
+router.get("/getUser/:userId", getUser);
+
+router.put('/update/:userId', verifyToken, updateUser);
 
 module.exports= router;
