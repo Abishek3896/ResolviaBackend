@@ -5,11 +5,11 @@ const { uploadFile } = require('../utils/uploadFile');
 const create = async (req, res, next) => {
   //console.log(req.user);
   if (!req.body.title || !req.body.content) {
-    return next(errorHandler(400, 'Please provide all required fields'));
+    return next(errorHandler(400, "Please provide all required fields"));
   }
   const slug = req.body.title
-    .split(' ')
-    .join('-')
+    .split(" ")
+    .join("-")
     .toLowerCase()
     .replace(/[^a-zA-Z0-9-]/g, '');
   const uploadMediaContent = async () => {
@@ -73,4 +73,28 @@ const getResolves = async (req, res, next) => {
   }
 };
 
-module.exports = { create, getResolves };
+const likeResolve = async (req, res, next) => {
+  try {
+    const resolve = await Resolve.findById(req.params.resolveId);
+
+    if (!resolve) {
+      return next(errorHandler(404, "Resolve not found"));
+    }
+
+    const userIndex = resolve.likes.indexOf(req.user.id);
+    if (userIndex === -1) {
+      resolve.numberOfLikes += 1;
+      resolve.likes.push(req.user.id);
+    } else {
+      resolve.numberOfLikes -= 1;
+      resolve.likes.splice(userIndex, 1);
+    }
+
+    await resolve.save();
+    res.status(200).json(resolve);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { create, getResolves, likeResolve };

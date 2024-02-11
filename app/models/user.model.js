@@ -14,7 +14,7 @@ const userSchema = new Schema(
       unique: true,
     },
     mobileNum: {
-      type: String,
+      type: Number,
     },
     password: {
       type: String,
@@ -24,6 +24,34 @@ const userSchema = new Schema(
       type: String,
       default:
         'https://i.pinimg.com/originals/07/66/d1/0766d183119ff92920403eb7ae566a85.png',
+    },
+    firstname: {
+      type: String,
+      default:'',
+    },
+    lastname: {
+      type: String,
+      default:'',
+    },
+    age: {
+      type: Number,
+      default:14,
+    },
+    gender: {
+      type: String,
+      default:'',
+    },
+    education: {
+      type: String,
+      default:'',
+    },
+    profession: {
+      type: String,
+      default:'',
+    },
+    country: {
+      type: String,
+      default:'',
     },
   },
   {
