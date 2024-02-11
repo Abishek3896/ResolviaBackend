@@ -1,6 +1,6 @@
-const errorHandler = require("../middleware/error.js");
-const Resolve = require("../models/resolve.model.js");
-const AWS = require("aws-sdk");
+const errorHandler = require('../middleware/error.js');
+const Resolve = require('../models/resolve.model.js');
+const { uploadFile } = require('../utils/uploadFile');
 
 const create = async (req, res, next) => {
   //console.log(req.user);
@@ -11,11 +11,29 @@ const create = async (req, res, next) => {
     .split(" ")
     .join("-")
     .toLowerCase()
-    .replace(/[^a-zA-Z0-9-]/g, "");
+    .replace(/[^a-zA-Z0-9-]/g, '');
+  const uploadMediaContent = async () => {
+    const media = [];
 
+    try {
+      for (const file of Array.from(req.files)) {
+        const content = await uploadFile(file);
+        media.push(content);
+        //console.log('Inside func', media);
+      }
+
+      //console.log('Outside func', media);
+      return media;
+    } catch (err) {
+      next(err);
+    }
+  };
+  const media_content = await uploadMediaContent();
+  //console.log(media_content);
   const newResolve = new Resolve({
     ...req.body,
     slug,
+    media_content,
     userId: req.user.id,
   });
   try {
@@ -24,43 +42,6 @@ const create = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-const uploadFile = (req, res, next) => {
-  //console.log('File uploaded', req.file);
-  // Create unique bucket name
-  const bucketName = process.env.AWS_S3_BUCKET_NAME;
-  // Create name for uploaded object key
-  const filenamearray = req.file.originalname.split(".");
-  const uniquename =
-    filenamearray[0].split(" ").join("") + Math.random().toString(9).slice(-4);
-  const keyName = uniquename + "." + filenamearray[filenamearray.length - 1];
-  //console.log(keyName);
-  // Create a promise on S3 service object
-  const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-
-  const uploadParams = {
-    Bucket: bucketName,
-    Key: keyName,
-    Body: req.file.buffer,
-    ACL: "public-read",
-    ContentType: req.file.mimetype,
-  };
-
-  // call S3 to retrieve upload file to specified bucket
-  s3.upload(uploadParams, function (err, data) {
-    if (err) {
-      next(err);
-    }
-    if (data) {
-      //console.log(data);
-      const url = data.Location.replace(
-        process.env.S3_BASE_URL,
-        process.env.CLOUDFRONT_BASE_URL
-      );
-      res.status(200).json(url);
-    }
-  });
 };
 
 const getResolves = async (req, res, next) => {
@@ -116,4 +97,4 @@ const likeResolve = async (req, res, next) => {
   }
 };
 
-module.exports = { create, getResolves, uploadFile, likeResolve };
+module.exports = { create, getResolves, likeResolve };
