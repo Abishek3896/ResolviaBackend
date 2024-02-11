@@ -12,9 +12,24 @@ const create = async (req, res, next) => {
     .join('-')
     .toLowerCase()
     .replace(/[^a-zA-Z0-9-]/g, '');
+  const uploadMediaContent = async () => {
+    const media = [];
 
-  const media_content = await uploadFile(req.file);
+    try {
+      for (const file of Array.from(req.files)) {
+        const content = await uploadFile(file);
+        media.push(content);
+        //console.log('Inside func', media);
+      }
 
+      //console.log('Outside func', media);
+      return media;
+    } catch (err) {
+      next(err);
+    }
+  };
+  const media_content = await uploadMediaContent();
+  //console.log(media_content);
   const newResolve = new Resolve({
     ...req.body,
     slug,

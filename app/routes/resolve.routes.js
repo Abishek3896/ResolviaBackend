@@ -13,7 +13,7 @@ const upload = multer({
 
 const router = express.Router();
 
-router.post('/create', verifyToken, upload.single('document'), create);
+router.post('/create', verifyToken, upload.array('document', 3), create);
 router.get('/getresolves', getResolves);
 
 module.exports = router;
