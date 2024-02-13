@@ -5,11 +5,11 @@ const { uploadFile } = require('../utils/uploadFile');
 const create = async (req, res, next) => {
   //console.log(req.user);
   if (!req.body.title || !req.body.content) {
-    return next(errorHandler(400, "Please provide all required fields"));
+    return next(errorHandler(400, 'Please provide all required fields'));
   }
   const slug = req.body.title
-    .split(" ")
-    .join("-")
+    .split(' ')
+    .join('-')
     .toLowerCase()
     .replace(/[^a-zA-Z0-9-]/g, '');
   const uploadMediaContent = async () => {
@@ -46,10 +46,13 @@ const create = async (req, res, next) => {
 
 const getResolves = async (req, res, next) => {
   try {
-     const startIndex = parseInt(req.query.startIndex) || 0;
-     const limit = parseInt(req.query.limit) ;
-   // const sortDirection = req.query.order === 'asc' ? 1 : -1;
-
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit);
+    const sort = {};
+    const sortBy =
+      req.query.sortBy === 'popularity' ? 'numberOfLikes' : 'createdAt';
+    const sortDirection = req.query.sortOrder === 'asc' ? 1 : -1;
+    sort[sortBy] = sortDirection;
     const resolves = await Resolve.find({
       ...(req.query.resolveId && { _id: req.query.resolveId }),
       ...(req.query.content && { content: req.query.content }),
@@ -60,11 +63,24 @@ const getResolves = async (req, res, next) => {
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.post_as && { post_as: req.query.post_as }),
+      ...(req.query.searchTerm && {
+        $or: [
+          { title: { $regex: req.query.searchTerm, $options: 'i' } },
+          { content: { $regex: req.query.searchTerm, $options: 'i' } },
+          { post_as: { $regex: req.query.searchTerm, $options: 'i' } },
+          //{category: {$regex: req.query.searchTerm, $options: 'i'}},
+        ],
+      }),
+      ...(req.query.mySearch && {
+        $or: [
+          { title: { $regex: req.query.mySearch, $options: 'i' } },
+          { content: { $regex: req.query.mySearch, $options: 'i' } },
+        ],
+      }),
     })
-
-    .limit(limit)
-    //.sort({ updatedAt: sortDirection })
-    .skip(startIndex)
+      .sort(sort)
+      .skip(startIndex)
+      .limit(limit);
     res.status(200).json({
       resolves,
     });
@@ -78,7 +94,7 @@ const likeResolve = async (req, res, next) => {
     const resolve = await Resolve.findById(req.params.resolveId);
 
     if (!resolve) {
-      return next(errorHandler(404, "Resolve not found"));
+      return next(errorHandler(404, 'Resolve not found'));
     }
 
     const userIndex = resolve.likes.indexOf(req.user.id);
