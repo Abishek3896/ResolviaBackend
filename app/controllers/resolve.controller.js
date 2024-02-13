@@ -46,8 +46,8 @@ const create = async (req, res, next) => {
 
 const getResolves = async (req, res, next) => {
   try {
-    // const startIndex = parseInt(req.query.startIndex) || 0;
-    // const limit = parseInt(req.query.limit) || 9;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit);
     const sort = {};
     const sortBy =
       req.query.sortBy === 'popularity' ? 'numberOfLikes' : 'createdAt';
@@ -77,9 +77,10 @@ const getResolves = async (req, res, next) => {
           { content: { $regex: req.query.mySearch, $options: 'i' } },
         ],
       }),
-    }).sort(sort);
-    // .skip(startIndex)
-    // .limit(limit);
+    })
+      .sort(sort)
+      .skip(startIndex)
+      .limit(limit);
     res.status(200).json({
       resolves,
     });
