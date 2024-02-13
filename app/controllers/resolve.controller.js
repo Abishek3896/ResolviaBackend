@@ -46,9 +46,9 @@ const create = async (req, res, next) => {
 
 const getResolves = async (req, res, next) => {
   try {
-    // const startIndex = parseInt(req.query.startIndex) || 0;
-    // const limit = parseInt(req.query.limit) || 9;
-    // const sortDirection = req.query.order === 'asc' ? 1 : -1;
+     const startIndex = parseInt(req.query.startIndex) || 0;
+     const limit = parseInt(req.query.limit) ;
+   // const sortDirection = req.query.order === 'asc' ? 1 : -1;
 
     const resolves = await Resolve.find({
       ...(req.query.resolveId && { _id: req.query.resolveId }),
@@ -60,11 +60,11 @@ const getResolves = async (req, res, next) => {
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.post_as && { post_as: req.query.post_as }),
-    });
+    })
 
-    // .sort({ updatedAt: sortDirection })
-    // .skip(startIndex)
-    // .limit(limit);
+    .limit(limit)
+    //.sort({ updatedAt: sortDirection })
+    .skip(startIndex)
     res.status(200).json({
       resolves,
     });

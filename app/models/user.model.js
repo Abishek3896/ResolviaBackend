@@ -53,6 +53,10 @@ const userSchema = new Schema(
       type: String,
       default:'',
     },
+    category: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,
