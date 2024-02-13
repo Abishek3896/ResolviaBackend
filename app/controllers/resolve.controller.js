@@ -50,7 +50,7 @@ const getResolves = async (req, res, next) => {
     // const limit = parseInt(req.query.limit) || 9;
     const sort = {};
     const sortBy =
-      req.query.sortBy === 'popularity' ? 'updatedAt' : 'createdAt';
+      req.query.sortBy === 'popularity' ? 'numberOfLikes' : 'createdAt';
     const sortDirection = req.query.sortOrder === 'asc' ? 1 : -1;
     sort[sortBy] = sortDirection;
     const resolves = await Resolve.find({
@@ -68,6 +68,13 @@ const getResolves = async (req, res, next) => {
           { title: { $regex: req.query.searchTerm, $options: 'i' } },
           { content: { $regex: req.query.searchTerm, $options: 'i' } },
           { post_as: { $regex: req.query.searchTerm, $options: 'i' } },
+          //{category: {$regex: req.query.searchTerm, $options: 'i'}},
+        ],
+      }),
+      ...(req.query.mySearch && {
+        $or: [
+          { title: { $regex: req.query.mySearch, $options: 'i' } },
+          { content: { $regex: req.query.mySearch, $options: 'i' } },
         ],
       }),
     }).sort(sort);
