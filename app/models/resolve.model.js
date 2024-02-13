@@ -21,8 +21,8 @@ const resolveSchema = new Schema(
       default: [],
     },
     category: {
-      type: String,
-      default: 'uncategorized',
+      type: Array,
+      default: [],
     },
     slug: {
       type: String,
