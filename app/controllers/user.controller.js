@@ -1,5 +1,5 @@
-const User= require('../models/user.model.js');
-
+const User = require('../models/user.model.js');
+const { uploadFile } = require('../utils/uploadFile');
 const test = (req, res) => {
   res.json({ message: 'Test API' });
 };
@@ -15,8 +15,7 @@ const signout = (req, res, next) => {
   }
 };
 
-
- const getUser = async (req, res, next) => {
+const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {
@@ -38,7 +37,6 @@ const updateUser = async (req, res, next) => {
       req.params.userId,
       {
         $set: {
-          profilePicture: req.body.profilePicture,
           firstname: req.body.firstname,
           lastname: req.body.lastname,
           age: req.body.age,
@@ -57,7 +55,22 @@ const updateUser = async (req, res, next) => {
     next(error);
   }
 };
-
-module.exports={test,signout,getUser,updateUser};
-
-
+const uploadPhoto = async (req, res, next) => {
+  try {
+    const url = await uploadFile(req.file);
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $set: {
+          profilePicture: url,
+        },
+      },
+      { new: true }
+    );
+    const { password, ...rest } = updatedUser._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+module.exports = { test, signout, getUser, updateUser, uploadPhoto };
