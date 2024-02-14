@@ -46,6 +46,7 @@ const updateUser = async (req, res, next) => {
           education: req.body.education,
           profession: req.body.profession,
           country: req.body.country,
+          category: req.body.category,
         },
       },
       { new: true }
