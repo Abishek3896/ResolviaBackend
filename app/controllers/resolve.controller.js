@@ -106,6 +106,7 @@ const likeResolve = async (req, res, next) => {
       resolve.likes.splice(userIndex, 1);
     }
 
+    
     await resolve.save();
     res.status(200).json(resolve);
   } catch (error) {
