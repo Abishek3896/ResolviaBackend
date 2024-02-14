@@ -91,10 +91,7 @@ const google = async (req, res, next) => {
         profilePicture: googlePhotoUrl,
       });
       await newUser.save();
-      const token = jwt.sign(
-        { id: newUser._id, isAdmin: newUser.isAdmin },
-        process.env.JWT_SECRET
-      );
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password, ...rest } = newUser._doc;
       res
         .status(200)
@@ -108,4 +105,30 @@ const google = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, signin, google };
+const refreshToken = async (req, res, next) => {
+  const username = req.body.username;
+  const email = req.body.email;
+  try {
+    const validEmail = await User.findOne({ email });
+    if (!validEmail) {
+      return next(error(404, 'User Not Valid'));
+    }
+    const validUser = await User.findOne({ username });
+    if (!validUser) {
+      return next(error(404, 'User Not Valid'));
+    }
+    const refreshedtoken = jwt.sign(
+      { id: validUser._id },
+      process.env.JWT_REFRESH_SECRET
+    );
+    const { password: pass, ...rest } = validUser._doc;
+    res
+      .status(200)
+      .cookie('access_token', refreshedtoken, { httpOnly: true })
+      .json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { signup, signin, google, refreshToken };
