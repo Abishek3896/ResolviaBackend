@@ -119,7 +119,7 @@ const refreshToken = async (req, res, next) => {
     }
     const refreshedtoken = jwt.sign(
       { id: validUser._id },
-      process.env.JWT_REFRESH_SECRET
+      process.env.JWT_SECRET
     );
     const { password: pass, ...rest } = validUser._doc;
     res
