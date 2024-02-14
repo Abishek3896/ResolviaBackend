@@ -66,10 +66,7 @@ const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign(
-        { id: user._id, isAdmin: user.isAdmin },
-        process.env.JWT_SECRET
-      );
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password, ...rest } = user._doc;
       res
         .status(200)
@@ -115,6 +112,9 @@ const refreshToken = async (req, res, next) => {
     }
     const validUser = await User.findOne({ username });
     if (!validUser) {
+      return next(error(404, 'User Not Valid'));
+    }
+    if (validUser.username != validEmail.username) {
       return next(error(404, 'User Not Valid'));
     }
     const refreshedtoken = jwt.sign(
