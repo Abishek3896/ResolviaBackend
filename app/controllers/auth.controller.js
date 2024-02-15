@@ -80,7 +80,10 @@ const google = async (req, res, next) => {
       res
         .status(200)
         .cookie("access_token", token, {
-          httpOnly: true,
+          path: '/',
+      sameSite: 'None',
+      secure: true,
+      httpOnly: false,
           domain: "onrender.com",
         })
         .json(rest);
@@ -103,7 +106,10 @@ const google = async (req, res, next) => {
       res
         .status(200)
         .cookie("access_token", token, {
-          httpOnly: true,
+          path: '/',
+          sameSite: 'None',
+          secure: true,
+          httpOnly: false,
 
           domain: "onrender.com",
         })
@@ -137,7 +143,10 @@ const refreshToken = async (req, res, next) => {
     res
       .status(200)
       .cookie("access_token", refreshedtoken, {
-        httpOnly: true,
+        path: '/',
+      sameSite: 'None',
+      secure: true,
+      httpOnly: false,
         domain: "onrender.com",
       })
       .json(rest);
