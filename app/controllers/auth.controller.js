@@ -84,7 +84,7 @@ const google = async (req, res, next) => {
       sameSite: 'None',
       secure: true,
       httpOnly: false,
-          domain: "onrender.com",
+          domain: process.env.AUTH_COOKIE_DOMAIN,
         })
         .json(rest);
     } else {
@@ -111,7 +111,7 @@ const google = async (req, res, next) => {
           secure: true,
           httpOnly: false,
 
-          domain: "onrender.com",
+          domain: process.env.AUTH_COOKIE_DOMAIN,
         })
         .json(rest);
     }
@@ -147,7 +147,7 @@ const refreshToken = async (req, res, next) => {
       sameSite: 'None',
       secure: true,
       httpOnly: false,
-        domain: "onrender.com",
+        domain: process.env.AUTH_COOKIE_DOMAIN,
       })
       .json(rest);
   } catch (error) {
