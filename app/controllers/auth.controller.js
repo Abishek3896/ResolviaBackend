@@ -56,7 +56,7 @@ const signin = async (req, res, next) => {
     res
       .status(200)
       .cookie('access_token', token, {
-        httpOnly: true,
+        httpOnly: false,
         domain: process.env.AUTH_COOKIE_DOMAIN,
       })
       .json(rest);
@@ -79,7 +79,7 @@ const google = async (req, res, next) => {
       res
         .status(200)
         .cookie('access_token', token, {
-          httpOnly: true,
+          httpOnly: false,
           domain: process.env.AUTH_COOKIE_DOMAIN,
         })
         .json(rest);
@@ -102,7 +102,7 @@ const google = async (req, res, next) => {
       res
         .status(200)
         .cookie('access_token', token, {
-          httpOnly: true,
+          httpOnly: false,
           domain: process.env.AUTH_COOKIE_DOMAIN,
         })
         .json(rest);
@@ -135,7 +135,7 @@ const refreshToken = async (req, res, next) => {
     res
       .status(200)
       .cookie('access_token', refreshedtoken, {
-        httpOnly: true,
+        httpOnly: false,
         domain: process.env.AUTH_COOKIE_DOMAIN,
       })
       .json(rest);
