@@ -81,7 +81,7 @@ const google = async (req, res, next) => {
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
-          domain: ".onrender.com",
+          domain: "onrender.com",
         })
         .json(rest);
     } else {
@@ -105,7 +105,7 @@ const google = async (req, res, next) => {
         .cookie("access_token", token, {
           httpOnly: true,
 
-          domain: ".onrender.com",
+          domain: "onrender.com",
         })
         .json(rest);
     }
@@ -138,7 +138,7 @@ const refreshToken = async (req, res, next) => {
       .status(200)
       .cookie("access_token", refreshedtoken, {
         httpOnly: true,
-        domain: ".onrender.com",
+        domain: "onrender.com",
       })
       .json(rest);
   } catch (error) {
