@@ -17,11 +17,12 @@ const resolveSchema = new Schema(
       unique: true,
     },
     media_content: {
-      type: String,
+      type: Array,
+      default: [],
     },
     category: {
-      type: String,
-      default: 'uncategorized',
+      type: Array,
+      default: [],
     },
     slug: {
       type: String,
@@ -32,12 +33,31 @@ const resolveSchema = new Schema(
       type: String,
       required: true,
     },
+    likes: {
+      type: Array,
+      default: [],
+    },
+    numberOfLikes: {
+      type: Number,
+      default: 0,
+    },
+    dislikes: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Resolve = mongoose.model('Resolve', resolveSchema);
+{
+  /*resolveSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
+}); */
+}
 
+const Resolve = mongoose.model('Resolve', resolveSchema);
 module.exports = Resolve;

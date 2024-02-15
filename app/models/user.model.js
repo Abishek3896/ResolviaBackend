@@ -14,7 +14,7 @@ const userSchema = new Schema(
       unique: true,
     },
     mobileNum: {
-      type: String,
+      type: Number,
     },
     password: {
       type: String,
@@ -23,7 +23,39 @@ const userSchema = new Schema(
     profilePicture: {
       type: String,
       default:
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+        'https://i.pinimg.com/originals/07/66/d1/0766d183119ff92920403eb7ae566a85.png',
+    },
+    firstname: {
+      type: String,
+      default:'',
+    },
+    lastname: {
+      type: String,
+      default:'',
+    },
+    age: {
+      type: Number,
+      default:14,
+    },
+    gender: {
+      type: String,
+      default:'',
+    },
+    education: {
+      type: String,
+      default:'',
+    },
+    profession: {
+      type: String,
+      default:'',
+    },
+    country: {
+      type: String,
+      default:'',
+    },
+    category: {
+      type: Array,
+      default: [],
     },
   },
   {
@@ -31,10 +63,6 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject();
-  object.id = _id;
-  return object;
-});
+
 
 module.exports = mongoose.model('user', userSchema);
