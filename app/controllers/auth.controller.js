@@ -52,9 +52,15 @@ const signin = async (req, res, next) => {
 
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
+    
     res
       .status(200)
-      .cookie('access_token', token, { httpOnly: true })
+      .cookie('access_token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+       
+      })
       .json(rest);
   } catch (error) {
     next(error);
@@ -71,10 +77,17 @@ const google = async (req, res, next) => {
         process.env.JWT_SECRET
       );
       const { password, ...rest } = user._doc;
+
+//       Secure: Ensures cookies are sent over HTTPS, which is required for cross-site cookies.
+// SameSite=None: Allows the cookie to be sent in cross-site requests. This is crucial for your setup where FE and BE are on different domains.
+// HttpOnly (recommended for auth tokens): Prevents JavaScript access to the cookie, mitigating the risk of client-side script attacks.
       res
         .status(200)
         .cookie('access_token', token, {
           httpOnly: true,
+          secure: true,
+          sameSite: 'None',
+          
         })
         .json(rest);
     } else {
@@ -100,6 +113,9 @@ const google = async (req, res, next) => {
         .status(200)
         .cookie('access_token', token, {
           httpOnly: true,
+          secure: true,
+          sameSite: 'None',
+         
         })
         .json(rest);
     }
