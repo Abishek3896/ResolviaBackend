@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const signup = async (req, res, next) => {
   const { username, email, mobileNum, password } = req.body;
   console.log(req.body);
-
   if (
     !username ||
     !email ||
@@ -16,7 +15,9 @@ const signup = async (req, res, next) => {
   ) {
     next(error(400, 'All fields are required'));
   }
-
+  if (password.length < 8) {
+    next(error(400, 'Passward should be 8 characters'));
+  }
   const salt = bcryptjs.genSaltSync(10);
   const hashedPassword = bcryptjs.hashSync(password, salt);
 

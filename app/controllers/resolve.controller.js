@@ -89,6 +89,55 @@ const getResolves = async (req, res, next) => {
   }
 };
 
+const updateResolve = async (req, res, next) => {
+  //console.log(req.body, req.body.title, req.body.content, req.params.resolveId);
+  if (!req.body.title || !req.body.content) {
+    return next(errorHandler(400, 'Please provide all required fields'));
+  }
+  try {
+    const uploadMediaContent = async () => {
+      const media = [];
+
+      try {
+        for (const file of Array.from(req.files)) {
+          const content = await uploadFile(file);
+          media.push(content);
+        }
+        return media;
+      } catch (err) {
+        next(err);
+      }
+    };
+    const Updated_media_content = await uploadMediaContent();
+    const updatedResolve = await Resolve.findByIdAndUpdate(
+      req.params.resolveId,
+      {
+        $set: {
+          content: req.body.content,
+          category: req.body.category,
+          post_as: req.body.post_as,
+        },
+        $push: { media_content: { $each: Updated_media_content } },
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedResolve);
+  } catch (error) {
+    next(error);
+  }
+};
+const deleteResolve = async (req, res, next) => {
+  if (req.user.id != req.params.userId) {
+    return next(errorHandler(404, 'User not Authorized'));
+  }
+  try {
+    await Resolve.findByIdAndDelete(req.params.resolveId);
+    res.status(200).json('The Post has been deleted');
+  } catch (error) {
+    next(error);
+  }
+};
+
 const likeResolve = async (req, res, next) => {
   try {
     const resolve = await Resolve.findById(req.params.resolveId);
@@ -106,7 +155,6 @@ const likeResolve = async (req, res, next) => {
       resolve.likes.splice(userIndex, 1);
     }
 
-    
     await resolve.save();
     res.status(200).json(resolve);
   } catch (error) {
@@ -114,4 +162,10 @@ const likeResolve = async (req, res, next) => {
   }
 };
 
-module.exports = { create, getResolves, likeResolve };
+module.exports = {
+  create,
+  getResolves,
+  likeResolve,
+  updateResolve,
+  deleteResolve,
+};
