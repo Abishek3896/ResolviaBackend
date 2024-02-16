@@ -1,6 +1,10 @@
 const express = require('express');
 const verifyToken = require('../middleware/verifyUser.js');
-const { create, getResolves, likeResolve } = require('../controllers/resolve.controller.js');
+const {
+  create,
+  getResolves,
+  likeResolve,
+} = require('../controllers/resolve.controller.js');
 const multer = require('multer');
 
 const storage = multer.memoryStorage();
@@ -14,7 +18,7 @@ const upload = multer({
 const router = express.Router();
 
 router.post('/create', verifyToken, upload.array('document', 3), create);
-router.get('/getresolves', getResolves);
+router.get('/getresolves', verifyToken, getResolves);
 router.put('/likeResolve/:resolveId', verifyToken, likeResolve);
 
 module.exports = router;
