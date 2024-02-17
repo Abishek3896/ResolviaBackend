@@ -128,7 +128,7 @@ const updateResolve = async (req, res, next) => {
 };
 const deleteResolve = async (req, res, next) => {
   //console.log(req.user);
-  if (!req.user.isAdmin || req.user.id != req.params.userId) {
+  if (req.user.id != req.params.userId) {
     return next(errorHandler(404, 'User not Authorized'));
   }
   try {
