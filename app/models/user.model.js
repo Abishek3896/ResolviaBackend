@@ -27,42 +27,44 @@ const userSchema = new Schema(
     },
     firstname: {
       type: String,
-      default:'',
+      default: '',
     },
     lastname: {
       type: String,
-      default:'',
+      default: '',
     },
     age: {
       type: Number,
-      default:14,
+      default: 14,
     },
     gender: {
       type: String,
-      default:'',
+      default: '',
     },
     education: {
       type: String,
-      default:'',
+      default: '',
     },
     profession: {
       type: String,
-      default:'',
+      default: '',
     },
     country: {
       type: String,
-      default:'',
+      default: '',
     },
     category: {
       type: Array,
       default: [],
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   {
     timestamps: true,
   }
 );
-
-
 
 module.exports = mongoose.model('user', userSchema);
